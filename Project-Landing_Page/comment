@@ -1,0 +1,5 @@
+# n the code above, the compress_image function takes four parameters: input_image (path to the input image file), output_image (path to save the compressed image file), max_size (maximum size in bytes), and quality (quality of the compressed image ranging from 1 to 100).
+
+# The function uses a while loop to repeatedly compress the image with decreasing quality until the resulting image size is smaller than or equal to the specified max_size.
+
+# Please note that the image compression is a trade-off between size and quality. You can adjust the max_size and quality parameters according to your requirements. Additionally, make sure you have the Pillow library installed (pip install pillow) before running the code.

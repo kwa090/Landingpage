@@ -1,0 +1,29 @@
+m PIL import Image
+import os
+
+def compress_image(input_image, output_image, max_size, quality):
+	    """
+		        Compress the given image to the specified maximum size (in bytes) and save it to the output path.
+			    The quality parameter determines the quality of the output image (1-100).
+			           """
+			           try:
+			               img = Image.open(input_image)
+			               img.save(output_image, optimize=True, quality=quality)
+
+			               # Check if the compressed image is still larger than the maximum size
+			               while os.path.getsize(output_image) > max_size:
+				                   quality -= 5
+						               img.save(output_image, optimize=True, quality=quality)
+
+	        print(f"Image compressed successfully to {output_image}!")
+		    except Exception as e:
+		            print(f"An error occurred while compressing the image: {str(e)}")
+
+
+# Example usage
+			    input_image = "input.jpg"  # Path to the input image
+			    output_image = "output.jpg"  # Path to save the compressed image
+			    max_size = 1024 * 1024  # Maximum size of the compressed image (1MB in this case)
+	quality = 80  # Quality of the compressed image (1-100)
+
+	compress_image(input_image, output_image, max_size, quality)

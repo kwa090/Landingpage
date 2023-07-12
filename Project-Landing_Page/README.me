@@ -1,0 +1,112 @@
+ 
+Image compression is a process applied to a graphics file to minimize its size in bytes without degrading image quality below an acceptable threshold. By reducing the file size, more images can be stored in a given amount of disk or memory space.
+
+from PIL import Image
+import os
+
+def compress_image(input_image, output_image, max_size, quality):
+	    """
+		        Compress the given image to the specified maximum size (in bytes) and save it to the output path.
+			    The quality parameter determines the quality of the output image (1-100).
+			           """
+			           try:
+			               img = Image.open(input_image)
+			               img.save(output_image, optimize=True, quality=quality)
+
+			               # Check if the compressed image is still larger than the maximum size
+			               while os.path.getsize(output_image) > max_size:
+				                   quality -= 5
+						               img.save(output_image, optimize=True, quality=quality)
+
+	        print(f"Image compressed successfully to {output_image}!")
+		    except Exception as e:
+		            print(f"An error occurred while compressing the image: {str(e)}")
+
+
+# Example usage
+			    input_image = "input.jpg"  # Path to the input image
+			    output_image = "output.jpg"  # Path to save the compressed image
+			    max_size = 1024 * 1024  # Maximum size of the compressed image (1MB in this case)
+	quality = 80  # Quality of the compressed image (1-100)
+
+	compress_image(input_image, output_image, max_size, quality)
+	What are the two types of image compression?
+	The methods used to compress image files typically fall into one of two categories: lossy and lossless. Lossy compression reduces an image file size by permanently removing less critical information, particularly redundant data. Lossy compression can significantly reduce file size, but it can also reduce image quality to the point of distortion, especially if the image is overly compressed. However, quality can be maintained when compression is carefully applied.
+
+	How it works
+	In the code above, the compress_image function takes four parameters: input_image (path to the input image file), output_image (path to save the compressed image file), max_size (maximum size in bytes), and quality (quality of the compressed image ranging from 1 to 100).
+
+	The function uses a while loop to repeatedly compress the image with decreasing quality until the resulting image size is smaller than or equal to the specified max_size.
+
+	Please note that the image compression is a trade-off between size and quality. You can adjust the max_size and quality parameters according to your requirements. Additionally, make sure you have the Pillow library installed (pip install pillow) before running the code.
+	Lossless compression#
+	Lossless compression is a method used to reduce the size of a file while maintaining the same quality as before it was compressed. For example, in a DSLR camera, you probably have the option to save photos as either RAW or JPEG. RAW files have no compression and are great if you're a professional photo editor. But they take up more space. JPEG, on the other hand, won't fill up your hard drive as fast, but some of the data is lost in the conversion.
+
+	Types of lossless images include:
+
+	RAW - Found in many DSLRs, and keeps all the light data received from the camera's sensor. For a professional, this great news. However, these files types tend to be quite large in size. Additionally, there are different versions of RAW, and you may need certain software to edit the files.
+	PNG - Compresses images to keep their small size by looking for patterns on a photo, and compressing them together. The compression is reversible, so once you open a PNG file, the image recovers exactly.
+	BMP - A format found exclusively to Microsoft. It's lossless, but not frequently used.
+	It should also be noted that converting a lossy photo back to lossless won't restore the photo's data.
+
+	Lossy compression#
+	In order to give the photo an even smaller size, lossy compression discards some parts of a photo. However, this doesn't mean the photo will look bad. Here are the two main types of lossy compression.
+
+	JPG#
+	Also known as JPEG, this format gets rid of bits and pieces of a photo that you may notice depending upon the level of compression you apply. A normal amount of compression will not be noticeable, while extreme compression may be obvious.
+
+	There are also other ways a JPG image's quality may be reduced. If you rotate the JPG too much, you'll notice a difference in quality. This is because the photo has to recompress itself with every rotation, losing some data in the process. There are however programs out there that rotate a JPG losslessly. The same degradation applies if you save a JPG multiple times.
+
+	GIF#
+	GIF compresses files by reducing the number of colors it has. If the photo has more than 256 colors (the maximum amount of colors older computers could have) this format will make the image look less appealing. The best use for GIFs are for images that are animated.
+
+	The example below shows a comparison between GIF images which range from 8 colors to 256 colors.
+
+	GIF compression comparison
+	Methods of compression#
+	Now that we've discussed various image formats, the following explains a few image compression methods used to achieve either lossless or lossy compression. These algorithms, or variations of these algorithms, are also what is used in image compression tools and services.
+
+	Deflate#
+	The Deflate method is a popular lossless image compression algorithm that uses a combination of the LZ77 compression algorithm and Huffman coding. The Deflate method is widely used in image compression and is the default compression method used by the PNG image format.
+
+	The LZ77 compression algorithm works by identifying and replacing repeated patterns in the image data with references to a single instance of the pattern. This process effectively reduces the size of the image data by replacing repeated patterns with a smaller reference.
+
+	Huffman coding is used in the Deflate method to further reduce the size of the image data by assigning short codes to frequently occurring patterns and longer codes to less frequently occurring patterns. This results in a more efficient representation of the image data, reducing its size even further.
+
+	The Deflate method is particularly well-suited to images with repeating patterns and few color variations, such as graphics and illustrations. It is also a lossless compression algorithm, which means that the image can be restored to its original form without any loss of quality.
+
+	Run-length#
+	Run-length encoding is a lossless image compression technique that is used to reduce the size of an image by encoding sequences of repeated pixels. This method is particularly useful for images that contain large areas of solid colors or repeating patterns, such as graphics or illustrations. In the Run-Length method, the image is divided into a series of scanlines, each of which represents a row of pixels in the image. The method then identifies sequences of repeated pixels in each scanline and encodes them as a single value, along with a count of how many times the pixel value is repeated.
+
+	Say you have a picture of red and white stripes, and there are 12 white pixels and 12 red pixels. Normally, the data for it would be written as WWWWWWWWWWWWRRRRRRRRRRRR, with W representing the white pixel and R the red pixel. Run length would put the data as 12W and 12R. Much smaller and simpler while still keeping the data unaltered.
+
+	The Run-Length method is a simple and effective image compression technique, but it does have some limitations. It is not well-suited to images that contain complex patterns or high levels of color variations, as these types of images typically contain many different pixel values, making it difficult to identify sequences of repeated pixels.
+
+	Arithmetic coding#
+	Arithmetic coding is a type of lossless image compression method that provides higher compression ratios compared to traditional methods such as Huffman coding or Run-Length encoding. In arithmetic coding, the image data is represented as a single number, called a code, instead of a sequence of symbols. This code is a fraction between 0 and 1, and it represents the probability of the image data being a certain sequence of pixels.
+
+	In the arithmetic coding process, the image data is analyzed and a probability model is constructed based on the frequency of the different pixel values. The image data is then divided into a sequence of symbols, and the probabilities of each symbol are used to generate a code. The resulting code is then encoded into a binary representation that can be stored or transmitted more efficiently.
+
+	One of the key benefits of arithmetic coding is its ability to produce very small codes, even for highly complex images. This is because it takes into account the correlations between the different symbols, allowing it to encode the image data in a more compact form.
+
+	However, the arithmetic coding method can be computationally intensive and requires a large amount of memory, making it less suitable for real-time image compression. It is also less widely used compared to other image compression methods, due to the complexity of its implementation.
+
+	Transform#
+	The Transform method of image compression is a lossless or lossy image compression technique that uses mathematical transformations to reduce the size of an image and commonly used for JPEGs. The idea behind the Transform method is to convert the image data into a different representation that is more compact, making it easier to compress.
+
+	One of the most widely used Transform methods is the Discrete Cosine Transform (DCT). In this method, the image is divided into small blocks of pixels and the pixel values in each block are transformed into a set of coefficients using a DCT formula. The DCT coefficients represent the relative importance of different frequencies in the image, and by discarding the lower frequency coefficients, which are typically less important for visual quality, the image can be compressed without a significant loss of quality. This is the basis for the JPEG image compression format, which uses a variant of the DCT method.
+
+	Another Transform method used in image compression is the Wavelet Transform. This method works by dividing the image data into a set of coefficients at different levels of resolution, and then only keeping the most significant coefficients. The result is an image representation that is more compact and easier to compress. The Wavelet Transform method is particularly well-suited to images that contain complex patterns or high levels of detail, as it can capture the important information in the image while discarding the less important details.
+
+	The Transform method of image compression is a powerful technique that can be used to reduce the size of an image while retaining its quality. However, the choice of Transform method and the specific parameters used can have a significant impact on the quality of the compressed image, so it is important to carefully consider these factors when choosing a Transform method for image compression.
+
+	Summary#
+	Hopefully, this post helps answer the question "what is image compression?" and "how does image compression work?". As you can see, there are many moving parts. No matter how fast the Internet gets or how performant storage becomes, there will always be room for compression. It's important to note that image compression algorithms are not one-size-fits-all, and different algorithms are suited to different types of images. For example, some algorithms are better suited to images with few colors and simple patterns, while others are better suited to images with more complex patterns and color variations.
+
+	So, why is image compression so important in our digital lives? As mentioned earlier, images can be quite large in size, making it difficult to store, transmit, and display them efficiently. By compressing images, we can reduce their size, making it easier to store and transmit them and also improving website loading times. This is especially important for websites and applications that rely heavily on images, as faster loading times can improve the user experience and reduce bounce rates.
+
+	Lossy vs Lossless Compression
+	In our increasingly digital age, where vast amounts of data are generated and transmitted daily, the importance of efficient compression techniques cannot be overstated. When it comes to reducing the size of your images for the web there are…
+
+	How WebP Compression Works
+	We've talked a lot about WebP and how it's beneficial for improving load times by reducing image sizes without sacrificing quality. However, we haven't yet gone into detail about how WebP compression actually works. There are various techniques at…
